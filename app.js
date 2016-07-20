@@ -39,7 +39,7 @@ $(() => {
         `curl 'https://accounts.google.com/o/oauth2/token' -s -d 'client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob'`,
         // if only grep had -o on all platforms
         `grep -E '"refresh_token" *: *"([^"]+)"'`,
-        `sed s/'^.*"refresh_token".*:.*"'//`,
+        `sed s/'^.*"refresh_token".*: *"'//`,
         `sed s/'"'//g`,
       ].join(' | '));
     }
