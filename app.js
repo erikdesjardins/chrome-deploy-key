@@ -35,7 +35,7 @@ $(() => {
     }
 
     if (clientId.val() && clientSecret.val() && code.val() && code.val() !== lastCode) {
-      curl.val(`curl 'https://accounts.google.com/o/oauth2/token' -d 'client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob' | grep -Po '"refresh_token":.*?[^\\]",?'`);
+      curl.val(`curl 'https://accounts.google.com/o/oauth2/token' -s -d 'client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob' | grep -Po '"refresh_token"\s*:\s*"([^"])"'`);
     }
   }
 
