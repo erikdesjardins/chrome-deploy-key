@@ -40,7 +40,7 @@ $(() => {
         // if only grep had -o on all platforms
         `grep -E '"refresh_token" *: *"([^"]+)"'`,
         `tr ':' '\n#'`,
-        `grep -E '^#'`
+        `grep -E '^#'`,
         `tr -d '#'`,
         `tr -d ' '`,
         `tr -d '"'`,
