@@ -43,6 +43,7 @@ $(() => {
 
       $.ajax({
         type: 'POST',
+        crossDomain: true,
         url: 'https://accounts.google.com/o/oauth2/token',
         data: `client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob`,
         dataType: 'json',
