@@ -3,7 +3,7 @@ $(() => {
   const clientSecret = $('#client_secret');
   const codeLink = $('#code_link');
   const code = $('#code');
-  const refreshToken = $('#refresh_token');
+  const curl = $('#curl');
 
   let lastCode, token;
 
@@ -19,7 +19,7 @@ $(() => {
     clientSecret.css('border-color', 'red');
     codeLink.removeAttr('href');
     code.css('border-color', 'red');
-    refreshToken.css('border-color', 'red');
+    curl.val('');
 
     if (clientId.val()) {
       clientId.css('border-color', 'green');
@@ -34,22 +34,8 @@ $(() => {
       code.css('border-color', 'green');
     }
 
-    if (token) {
-      refreshToken
-        .val(token)
-        .css('border-color', 'green');
-    } else if (clientId.val() && clientSecret.val() && code.val() && code.val() !== lastCode) {
-      lastCode = code.val();
-
-      $.ajax({
-        type: 'POST',
-        crossDomain: true,
-        url: 'https://accounts.google.com/o/oauth2/token',
-        data: `client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob`,
-        dataType: 'json',
-      }).then(r => {
-        token = r.refresh_token;
-      });
+    if (clientId.val() && clientSecret.val() && code.val() && code.val() !== lastCode) {
+      curl.val(`curl 'https://accounts.google.com/o/oauth2/token' -d 'client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob' | grep -Po '"refresh_token":.*?[^\\]",?'`);
     }
   }
 
