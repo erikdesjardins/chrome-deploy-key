@@ -36,7 +36,7 @@ $(() => {
 
     if (token) {
       refreshToken
-        .val(token);
+        .val(token)
         .css('border-color', 'green');
     } else if (clientId.val() && clientSecret.val() && code.val() && code.val() !== lastCode) {
       lastCode = code.val();
