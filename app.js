@@ -5,14 +5,9 @@ $(() => {
   const code = $('#code');
   const curl = $('#curl');
 
-  let lastCode, token;
-
   clientId.on('input', update);
   clientSecret.on('input', update);
-  code.on('input', () => {
-    token = undefined;
-    update();
-  });
+  code.on('input', update);
 
   function update() {
     clientId.css('border-color', 'red');
@@ -34,13 +29,11 @@ $(() => {
       code.css('border-color', 'green');
     }
 
-    if (clientId.val() && clientSecret.val() && code.val() && code.val() !== lastCode) {
+    if (clientId.val() && clientSecret.val() && code.val()) {
       curl.val([
         `curl 'https://accounts.google.com/o/oauth2/token' -s -d 'client_id=${clientId.val()}&client_secret=${clientSecret.val()}&code=${code.val()}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob'`,
-        // if only grep had -o on all platforms
-        `grep -E '"refresh_token" *: *"([^"]+)"'`,
-        `sed s/'^.*"refresh_token".*: *"'//`,
-        `sed s/'"'//g`,
+        `grep '"refresh_token"'`,
+        `sed -r s/'^.*"refresh_token".*:.*"([^"]+)".*$'/\\\\1/`,
       ].join(' | '));
     }
   }
