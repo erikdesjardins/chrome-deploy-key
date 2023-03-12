@@ -11,7 +11,7 @@
   <div>Client Secret</div>
   <div><input id="client_secret" type="text" size="100"></div>
   <br>
-  <div><b>Step 2:</b> Follow <a id="code_link">this link</a>, click accept, and paste the code below</div>
+  <div><b>Step 2:</b> Follow <a id="code_link">this link</a>, click accept. It should redirect to a nonexistent localhost port. Paste that URL below</div>
   <br>
   <div>Code</div>
   <div><input id="code" type="text" size="100"></div>
@@ -39,7 +39,7 @@
 
     if (clientId.value) {
       clientId.style.borderColor = 'green';
-      codeLink.href = `https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https://www.googleapis.com/auth/chromewebstore&client_id=${clientId.value}&redirect_uri=urn:ietf:wg:oauth:2.0:oob`;
+      codeLink.href = `https://accounts.google.com/o/oauth2/auth?response_type=code&scope=https://www.googleapis.com/auth/chromewebstore&client_id=${clientId.value}&redirect_uri=https://localhost:11111`;
     }
 
     if (clientSecret.value) {
@@ -51,8 +51,9 @@
     }
 
     if (clientId.value && clientSecret.value && code.value) {
+      const extractedCode = new URL(code.value).searchParams.get('code');
       curl.value = [
-        `curl 'https://accounts.google.com/o/oauth2/token' -s -d 'client_id=${clientId.value}&client_secret=${clientSecret.value}&code=${code.value}&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob'`,
+        `curl 'https://accounts.google.com/o/oauth2/token' -s -d 'client_id=${clientId.value}&client_secret=${clientSecret.value}&code=${extractedCode}&grant_type=authorization_code&redirect_uri=https://localhost:11111'`,
         `grep '"refresh_token"'`,
         `sed -r s/'^.*"refresh_token"[^:]*:[^:]*"([^"]+)".*$'/\\\\1/`,
       ].join(' | ');
